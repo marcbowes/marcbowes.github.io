@@ -1,0 +1,42 @@
+---
+layout: default
+title: Installing ruby-debug with 1.9
+---
+
+As a followup to my [previous post](/2011/08/12/rvm-on-alinux.html),
+which I did because I wanted to try out
+[holla](https://github.com/maccman/holla), I ran across a problem when
+running `bundle install`.
+
+  checking for vm_core.h... yes
+
+Turns out, holla requires ruby-debug19 which
+requires the Ruby source code. Since I installed with RVM, fixing this
+is a simple matter of telling Rubygems where the source code is. This
+can be done via the `--with-ruby-include` option and pointing it at
+the source for your version of Ruby.
+
+As it turns out, the
+[wiki page](https://github.com/mark-moseley/ruby-debug/wiki/Installation%3A-command-line-version)
+actually already has this tidbit on it, but I'd thought I'd point it
+out anyways. The incantation is:
+
+{% highlight bash %}
+gem install ruby-debug19 -- --with-ruby-include="$rvm_path/src/$(rvmtools identifier)/"
+{% endhighlight %}
+
+When I did this, `linecache19` was installed to 0.5.12. However, I had
+attempted to `bundle install` while it was at 0.5.11. I figured I
+could throw a `-v 0.5.11` to the `gem install` and things would work
+(with Bundler picking up the system-installed version). However, this
+gave another error:
+
+{% highlight bash %}
+checking for RUBY_VERSION_MAJOR in version.h... no
+{% endhighlight %}
+
+In this case, the problem is easy to sidestep in that `bundle update`
+found the newer version of `linecache` and used the version I had
+previously installed. I had a look in `version.h` and, indeed,
+`RUBY_VERSION_MAJOR` is not defined. I'm guessing that the point
+release was exactly to fix this bug.
