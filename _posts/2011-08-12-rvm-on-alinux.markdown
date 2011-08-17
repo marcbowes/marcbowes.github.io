@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Installing RVM on aLinux
 ---
 

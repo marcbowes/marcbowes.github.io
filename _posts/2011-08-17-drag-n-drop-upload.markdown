@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Drag & Drop upload with Rails, Rack Raw Upload & File Uploader
 ---
 
