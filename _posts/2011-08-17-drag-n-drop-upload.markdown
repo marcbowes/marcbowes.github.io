@@ -47,7 +47,8 @@ After adding `gem "rack-raw-upload"` to your `Gemfile` (and `bundle`),
 you'll need to add and configure the middleware, like so:
 
 {% highlight ruby %}
-require 'rack/raw_upload' config.middleware.use 'Rack::RawUpload', :paths => ['/articles']
+require 'rack/raw_upload'
+config.middleware.use 'Rack::RawUpload', :paths => ['/articles']
 {% endhighlight %}
 
 At this point, restart your application and the middleware will
