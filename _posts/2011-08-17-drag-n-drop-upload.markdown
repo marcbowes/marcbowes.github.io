@@ -47,7 +47,7 @@ After adding `gem "rack-raw-upload"` to your `Gemfile` (and `bundle`),
 you'll need to add and configure the middleware, like so:
 
 {% highlight ruby %}
-require 'rack/raw_upload' config.middleware.use 'Rack::RawUpload', :paths => ['/articles]
+require 'rack/raw_upload' config.middleware.use 'Rack::RawUpload', :paths => ['/articles']
 {% endhighlight %}
 
 At this point, restart your application and the middleware will
@@ -78,7 +78,6 @@ drop". The following simple change will do.
   <h3>Legacy uploader</h3>
   <p><%= f.file_field :file %></p>
   <%= f.submit("Upload") %>
-
   <h3>Or drop files here</h3> 
   <div id="file-uploader"></div>
 <% end %>
@@ -113,7 +112,7 @@ $(function() {
     /* Do not use the jQuery selector here */
     element: document.getElementById("file-uploader"),
     
-    action: $("#new_article).attr("action"),
+    action: $("#new_article").attr("action"),
     
     allowedExtensions: ["txt"],
     
