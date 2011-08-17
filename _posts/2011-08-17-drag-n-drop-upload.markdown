@@ -122,7 +122,7 @@ $(function() {
      */
     sizeLimit: 1048576,
 
-    /* Set Nzb category on submit */
+    /* Set Article category on submit */
     onSubmit: function(id, fileName) {
       uploader.setParams({
         authenticity_token: $("input[name='authenticity_token']").attr("value"),
