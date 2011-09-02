@@ -1,0 +1,286 @@
+---
+layout: post
+title: Upgrading a Rails 3 app to Rails 3.1 with a focus on the asset pipeline
+---
+
+In this post I'll cover the upgrade of an existing Rails 3 app to
+3.1. I couldn't wait for the 3.1 release because my app suffered from
+the 'junk drawer' symptom that DHH spoke about in his [2011 RailsConf keynote](http://www.youtube.com/watch?v=cGdCI2HhfAU).
+
+## Precursor
+
+Feel free to skip this background story of the mess I managed to get
+myself into. I'm sure it's a mess that many people land up with, so
+it'll be all familiar :-(
+
+The app in question is a personal project and is Javascript (via
+[Backbone](http://documentcloud.github.com/backbone/))
+heavy. Javascript, in general, doesn't (until now?) get as much from
+Rails developers as the rest of the stack. One of the things that
+Rails does very well is take away the overhead of having to make
+decisions. 'Where do I put this? What do I call it?' If you're like
+me, you care about these questions because they impact your ability to
+reason about and maintain your code. The asset pipeline helps with
+this. A lot.
+
+Here is the basic problem my toy app was facing. I started out with a
+Rails 3 app which generated all the Prototype files. I shoved in
+[jQuery](http://jquery.com/) (minified). Then I shoved in
+[Highcharts](http://www.highcharts.com/) (minified) and it's
+`modules/` and `themes/`. While developing I had some issues to debug
+and found the minification annoying. So I put both versions in and
+selected the one to vend based on the environment. Then I put in a
+generated [jQuery UI](http://jqueryui.com/) file (again in two
+flavours). Then I wrote some of my own helper functions, not specific
+to this project. Then I wrote some application specific code. Turns
+out I needed [json2](https://github.com/douglascrockford/JSON-js) as
+well. And that's just the Javascript. The CSS and supporting
+stylesheets were a similar story. While making my toy app less
+un-ugly, I pulled in the [960gs](http://960.gs/) framework. I
+basically had this:
+
+{% highlight bash %}
+$ tree public/javascripts 
+public/javascripts
+|-- adapters
+|   |-- mootools-adapter.js
+|   |-- mootools-adapter.src.js
+|   |-- prototype-adapter.js
+|   `-- prototype-adapter.src.js
+|-- application.js
+|-- backbone.min.js
+|-- controls.js
+|-- dragdrop.js
+|-- effects.js
+|-- graphs.js
+|-- highcharts.js
+|-- highcharts.src.js
+|-- jquery-ui-1.8.16.custom.min.js
+|-- jquery.js
+|-- jquery.min.js
+|-- json2.js
+|-- metric_search.js
+|-- modules
+|   |-- exporting.js
+|   `-- exporting.src.js
+|-- prototype.js
+|-- rails.js
+|-- themes
+|   |-- dark-blue.js
+|   |-- dark-green.js
+|   |-- gray.js
+|   `-- grid.js
+|-- underscore.js
+`-- underscore.min.js
+
+$ tree public/images     
+public/images
+`-- ui-lightness
+    |-- ui-bg_diagonals-thick_18_b81900_40x40.png
+    |-- ui-bg_diagonals-thick_20_666666_40x40.png
+    |-- ui-bg_flat_10_000000_40x100.png
+    |-- ui-bg_glass_100_f6f6f6_1x400.png
+    |-- ui-bg_glass_100_fdf5ce_1x400.png
+    |-- ui-bg_glass_65_ffffff_1x400.png
+    |-- ui-bg_gloss-wave_35_f6a828_500x100.png
+    |-- ui-bg_highlight-soft_100_eeeeee_1x100.png
+    |-- ui-bg_highlight-soft_75_ffe45c_1x100.png
+    |-- ui-icons_222222_256x240.png
+    |-- ui-icons_228ef1_256x240.png
+    |-- ui-icons_ef8c08_256x240.png
+    |-- ui-icons_ffd27a_256x240.png
+    `-- ui-icons_ffffff_256x240.png
+
+$ tree public/stylesheets 
+public/stylesheets
+|-- 960.css
+|-- application.css
+|-- jquery-ui-1.8.16.custom.css
+|-- reset.css
+`-- text.css
+{% endhighlight %}
+
+Ugh. What a mess. It's actually impossible to reason about what is
+what in this junk drawer. Despite the project being only a couple of
+months old, I had to open up files in `modules/` and `themes/` just to
+figure out who they belonged to. So when Rails 3.1 was released I
+jumped right in.
+
+## The upgrade
+
+The asset pipeline is very simple. It's a bunch of load paths. The 3
+key locations are `app/assets`, `lib/assets` and `vendor/assets`. In
+order, they are for your *application* code, your *shared/library*
+code and *third-party* code. None of these directories are
+magical. They are simply the defaults that are populated in
+`Rails.application.config.assets.paths`.
+
+### Part 1. Rails housekeeping.
+
+After putting `gem "rails", "~> 3.1.0"` in my `Gemfile` and running
+`bundle update` I got a message saying that `mysql2` had to be
+upgrade. Previously I had a `gem "mysql2", "~> 0.2.7"` as the 0.3
+series was Rails 3.1 only. Since that restriction isn't necessary
+anymore, I just removed it and things were happy.
+
+As with any Rails upgrade, you want to do a `rake rails:update` and
+for each file hit 'd' to review the differences. For some things like
+your `config/routes.rb` you'll want to keep your version. The
+important part is that `config.assets.enabled = true` should be added
+to your `config/application.rb`.
+
+### Part 2. Moving Assets.
+
+I went right ahead and moved things to their new
+homes. For each file, I asked myself if it was mine or somebody elses?
+If it was mine, I asked myself if it was application specific. I
+started with the javascripts:
+
+* Application (`app/assets`): `metric_search.js`, `graphs.js`
+* Library (`lib/assets`): `application.js`
+* Third-party: the rest
+
+Pretty simple, right? The reason `application.js` was 'library' was
+because it just contained a helper function called
+`serializeObject`. So, I renamed the file to `serialize_object.js` and
+put it in `lib/assets/javascripts`. The others were just moved into
+their relevant `javascripts/` directory.
+
+Stylesheets were simpler. I had a single `application.css` which was
+moved to `app/assets/stylesheets` . Everything else was moved to
+`vendor/assets/stylesheets`.
+
+Lastly, images. Here's the tricky part as there are two ways of doing
+this. Because the pipeline provides a logically flat view of your
+assets, you need a way of accessing that view. The method to do this
+is to use the `asset_data_uri` helper. This means that
+`application.css` would be renamed `application.css.erb` and all
+stanzas which went `url("/images/rails.png")` would now be `url(<%=
+asset_data_uri "rails.png" %>)`. This is what you should be doing in
+the general case. However, in my case the only images I had were
+jQuery UI generated ones and referenced by the jQuery UI generated
+stylesheet. I therefore opted to leave the images and stylesheet
+untouched (except that the stylesheet was moved to
+`vendor/assets/stylesheet`). This just works.
+
+### Part 3. Hooking up the pipeline.
+
+Right now all we've done is upgrade Rails to 3.1 and shuffled files
+around but I was already feeling better for it. I now had a file
+structure that reflected concerns. The final piece of the puzzle for
+me was to create `app/assets/javascripts/application.js`. Very simply,
+it looks like
+
+{% highlight javascript %}
+//= require jquery
+//= require jquery_ujs
+//= require json2
+//= require highcharts
+//= require modules/exporting
+//= require underscore
+//= require backbone
+//= require jquery-ui-1.8.16.custom
+//= require serialize_object
+//= require_tree .
+{% endhighlight %}
+
+(More on `jquery_ujs` in a bit.)
+
+I like this a lot. Basically it says 'include these files' in this
+order. The top bunch (down to `serialize_object`) is stuff in
+`vendor/assets/javascripts`. `serialize_object` is in
+`lib/assets/javascripts` and the `require_tree .` will pick up my
+application code (`graphs.js` and `metric_search.js`). Note that none
+of my files include the '.min'. In production, we'll have all these
+files merged into a single `application.js` and minified.
+
+Similarly for `app/assets/stylesheets/application.css`:
+
+{% highlight css %}
+*= require_self
+*= require 960
+*= require reset
+*= require text
+*= require jquery-ui-1.8.16.custom
+*= require_tree . 
+{% endhighlight %}
+
+Note that order isn't nearly as important for the stylesheets.
+
+Now, in my layout file all I had to do was use `javascript_include_tag
+"application"` and `stylesheet_link_tag "application"`. Voila!
+
+### Part 4. Polish.
+
+Now that I had returned my app to the same functionality as I had on
+Rails 3, I wanted to remove some of the cruft. The most obviously
+thing is to remove the '.min' files that were no longer
+necessary. After that, all the Prototype files, unused Highcharts
+themes and adapters and `rails.js`. Finally, `jquery.js` can be
+removed if you add `jquery-rails` to your `Gemfile`, run `bundle
+update` and restart your Web server. The restart is necessary because
+the gem works like a Rails Engine and thus fiddles with your asset
+paths to include it's own `vendor/assets/javascripts` directory, which
+includes `jquery.js` and `jquery_ujs` (used by Rails as the jQuery
+'replacement' for `rails.js`).
+
+### Part 5. Production!
+
+While this is a toy app, it is still used by a small set of people. To
+deploy to production, you need to have the assets precompiled. You do
+this by running `rake assets:precompile` (you'll probably want to add
+`public/assets` to your `.gitignore`). To do this you'll need a
+javascript runtime on your server. I also wanted minification of my
+`.js` and `.css` files. The following did the trick:
+
+{% highlight ruby %}
+group :assets do
+  gem "therubyracer"
+  gem "uglifier"
+  gem "yui-compressor"
+end
+{% endhighlight %}
+
+They provide a js runtime, js minification and css compression
+respectively. I also had to add the following to my
+`config/application.rb`:
+
+{% highlight ruby %}
+config.assets.js_compressor = :uglifier
+config.assets.css_compressor = :yui
+{% endhighlight %}
+
+Finally, to deploy I added `load "deploy/assets"` to the bottom of my
+`config/deploy.rb`. This will tell Capistrano to run `rake
+assets:precompile` on the server.
+
+## Gotchas
+
+One or two small things tripped me up.
+
+For one, `ActionMailer` now
+uses the `MyMailer.some_email(@user).deliver` syntax which I had
+totally forgotten about since the announcement about that was so long
+ago.
+
+For another, you may notice a new file
+`config/initializers/wrap_parameters.rb` which contains settings for
+`ActionController::ParamsWrapper`. The net effect here is that JSON
+documents won't contain the 'root element' anymore. That means that
+'/foo/1.json' will now return `{"bar" => "baz"}` instead of `{"foo" =>
+{"bar" => "baz"}}`. This is actually a very good thing because it
+means that things like Backbone.js require less hacking. I actually
+got to remove a whack of workaround code in my javascript. However, it
+may be a tripping point for your or anybody who consumes your
+site. You can simply not have this behavior by the `false` to `true`
+in the file.
+
+## Conclusion
+
+There is a lot of content here but the upgrade itself was fairly
+simple. I'm very happy with the results. My application layout is much
+better for it and my browser is fetching fewer and smaller files. At
+some point I may start converting my code to use `SCSS` and
+`CoffeeScript`, but I think those are secondary concerns compared to
+the ability to just see at a glance what code is yours and what
+isn't.
