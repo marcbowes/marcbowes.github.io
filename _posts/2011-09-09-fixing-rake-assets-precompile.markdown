@@ -7,7 +7,7 @@ Use Capistrano to deploy a Rails app you've just upgraded to Rails
 3.1? Seeing something like this in `cap deploy`?
 
 {% highlight bash %}
-*** [err :: yourapp] undefined method `exitstatus' for nil:NilClass
+*** [err :: yourapp] undefined method 'exitstatus' for nil:NilClass
 *** [err :: yourapp] (in /home/www/yoursite/releases/20110909151030/app/assets/stylesheets/application.css)
 {% endhighlight %}
 
