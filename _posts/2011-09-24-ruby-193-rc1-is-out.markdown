@@ -10,14 +10,19 @@ you hop on to the
 you may find some interesting things. My favourite:
 
 * net/http
-  * new method:
-    * `Net::HTTPRequest#set_form`: Added to support
-      both `application/x-www-form-urlencoded` and `multipart/form-data`.
+  
+  `Net::HTTPRequest#set_form`: Added to support both
+  `application/x-www-form-urlencoded` and `multipart/form-data`.
+  
 * optparse
-  * support for bash/zsh completion.
+
+  support for bash/zsh completion.
+
 * test/unit
-  * New arguments:
-    * `-j N`, `--jobs=N`: Allow run N testcases at once.
+
+  New arguments: `-j N`, `--jobs=N`: Allow run N testcases at once.
+      
 * yaml
-  * The default YAML engine is now Psych. You may downgrade to syck by setting
-    `YAML::ENGINE.yamler = 'syck'`.
+
+  The default YAML engine is now Psych. You may downgrade to syck by
+  setting `YAML::ENGINE.yamler = 'syck'`.
