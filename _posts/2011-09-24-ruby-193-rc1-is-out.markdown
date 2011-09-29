@@ -1,0 +1,28 @@
+---
+layout: post
+title: Ruby 1.9.3.rc1 is out
+---
+
+Hooray! Ruby 1.9.3 RC1 is out. You can read the [announcement
+here](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/388203). If
+you hop on to the
+[NEWS](http://svn.ruby-lang.org/repos/ruby/tags/v1_9_3_rc1/NEWS) page
+you may find some interesting things. My favourite:
+
+* net/http
+  
+  `Net::HTTPRequest#set_form`: Added to support both
+  `application/x-www-form-urlencoded` and `multipart/form-data`.
+  
+* optparse
+
+  support for bash/zsh completion.
+
+* test/unit
+
+  New arguments: `-j N`, `--jobs=N`: Allow run N testcases at once.
+      
+* yaml
+
+  The default YAML engine is now Psych. You may downgrade to syck by
+  setting `YAML::ENGINE.yamler = 'syck'`.
