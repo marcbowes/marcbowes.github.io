@@ -45,8 +45,8 @@ def timeout(sec, exception=Error)
 end
 {% endhighlight %}
 
-Its dead simple: fire up a new thread which will sleep then wake up and
-raise an error in original thread. An `ensure` block kills the
+Its dead simple: fire up a new thread which will sleep then wake up
+and raise an error in the original thread. An `ensure` block kills the
 would-be-murderer. In the case where the block executes fast enough,
 the would-be-murderer is killed before it can raise an exception.
 
@@ -57,12 +57,12 @@ will-murder-after-3s thread, T3. Under normal circumstances, we expect
 T3 to wake up first and raise an error in M. This causes T60 to be
 killed. However, under load the following can happen:
 
-* T3 and T60 both go to sleep
-* M starts executing
-* T3 oversleeps because it doesn't get scheduled back in in time
+* T3 and T60 both go to sleep.
+* M starts executing.
+* T3 oversleeps because it doesn't get scheduled back in in time.
 * If T3 oversleeps to the point where T60 also wants to wake up, all
-  bets are off
-* If T60 is scheduled in now, it will raise an error in M
+  bets are off.
+* If T60 is scheduled in now, it will raise an error in M.
 * M will now leave the outer `timeout` block and progress to it's
   `rescue` clause. Because of the `rescue`, the `ensure` which would
   kill off T3 is not yet run.
