@@ -16,7 +16,7 @@ Gemfile in the current directory. If so, run `bundle exec cmd`, else
 just run `cmd`. Real simple. Real neat.
 
 {% highlight bash %}
-bundle_commands=( rake spec rspec cucumber cap watchr rails rackup )
+bundle_commands="rake spec rspec cucumber cap watchr rails rackup"
  
 function run_bundler_cmd () {
     if [ -r ./Gemfile ]; then
