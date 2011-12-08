@@ -26,12 +26,12 @@ which sets up the necessarily variables and bootstraps RVM. But it
 feels like a hack to get a hack working (and make no mistake, RVM's
 ease of use is achieved through hacks).
 
-Rbenv makes this a lot simpler. All you need to do is modify your
-script's shebangs to use `ruby-local-exec` which will fiddle your
-`$PATH` such that the correct version of Ruby is used. This even
-detects `.rbenv-version` files without you having to `cd` into the
-project directory (RVM achieves this by fiddling with the `cd`
-builtin).
+[Rbenv](https://github.com/sstephenson/rbenv) makes this a lot
+simpler. All you need to do is modify your script's shebangs to use
+`ruby-local-exec` which will fiddle your `$PATH` such that the correct
+version of Ruby is used. This even detects `.rbenv-version` files
+without you having to `cd` into the project directory (RVM achieves
+this by fiddling with the `cd` builtin).
 
 Another issue I have with RVM is that deployment becomes trickier. For
 example, most scripts will use `require "rvm/capistrano"` for
@@ -62,8 +62,9 @@ Making the switch to rbenv is really simple. First, you'll need to
 uninstall RVM. You can do this with `rvmsudo rvm implode`. You really
 do need the `rvmsudo`, else it will be partially uninstalled and you
 may find some weird behavior. After that, just follow the dead-simple
-installation instructions for rbenv (which links to ruby-build -
-highly recommended).
+installation instructions for rbenv (which links to
+[ruby-build](https://github.com/sstephenson/ruby-build) - highly
+recommended).
 
 I plan on writing a follow up post which shows an example setup of a
 Rails stack using rbenv, passenger and nginx - all contained in a
