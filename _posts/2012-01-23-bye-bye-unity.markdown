@@ -18,7 +18,7 @@ while under Gentoo it would appear instantly, as if I had just
 alt-tabbed to it. Things like `irb` just *appear*. Quite amazing.
 
 On the golden path, things were very golden. However, Gentoo has a
-darker side. The dark side, really. When things don't work, they
+darker side. *The* dark side, really. When things don't work, they
 *really* don't work. Once you start pulling on that thread of
 dependencies, you typically cannot stop until you've rebuilt your
 entire system and its 3 days later. Once you've broken something, you
@@ -98,7 +98,7 @@ of confusion. No more! Gnome Shell lets me type 'SUPER + e + RET' and
 I'm in Emacs. That is, I press the Windows key, 'e' (for Emacs) and
 then Enter. Even if Unity got this right, it would probably still be a
 productivity hindrance because the launcher just takes so damn long to
-show.
+show. Gnome Shell makes it feel like dancing. Slick.
 
 After installing Gnome Shell, I grabbed the `user-theme` extension so
 I could install custom themes. I haven't installed a theme for many
@@ -118,7 +118,7 @@ player, ever, could compete with it - and if you disagree, you're
 wrong. Until now, that is.
 
 Amarok's rewrite (to the 2.x series) went something along the lines of
-'Qt4 is out so lets rewrite everything'. The result is one of the
+'Qt4 is out so let us rewrite everything'. The result is one of the
 worst music players I've ever used. Its laggy, doesn't play MP3's by
 default, doesn't handle a sizable collection and doesn't even make
 browsing a small one easy. Clementine, on the other hand, is what
