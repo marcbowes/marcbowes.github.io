@@ -17,7 +17,7 @@ essentially runs `ruby -c` on your behalf. The problem should be
 obvious: the `ruby` I need emacs to run is not on the `$PATH`. So lets
 add it:
 
-{% highlight lisp %}
+{% highlight cl %}
 ;; Setting rbenv path
 (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
 (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
