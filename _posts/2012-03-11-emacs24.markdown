@@ -32,7 +32,7 @@ about history, but want to be able to upgrade, I went with a shallow
 clone:
 
 {% highlight bash %}
-git clone git clone git://git.savannah.gnu.org/emacs.git --depth 1
+git clone git://git.savannah.gnu.org/emacs.git --depth 1
 {% endhighlight %}
 
 This was significantly faster. Changing into the newly cloned
