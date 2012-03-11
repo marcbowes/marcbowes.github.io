@@ -1,0 +1,174 @@
+---
+layout: post
+title: Emacs24
+---
+
+*tl;dr - I reinstalled Emacs24 and you can find my dotfiles
+ [here](https://github.com/marcbowes/emacs24-dotfiles). The commit I
+ made described in this post is
+ [here](https://github.com/marcbowes/emacs24-dotfiles/commit/d5a991c214f3f7ed6e74e1fb6e0a232d71ef63a5)*
+
+In the spirit of [Avdi's Emacs
+reboot](http://devblog.avdi.org/category/emacs-reboot/), I've decided
+to start from a clean slate with Emacs, this time on Emacs24. Here's
+what I did.
+
+## Out with the old
+
+The only way to get this sort of thing right is to completely throw
+away the old stuff, else it'll be a tempting crutch the first time
+things go wrong. To start off, I did `sudo apt-get remove emacs23` to
+remove my Ubuntu-installed version of Emacs23.
+
+## .. in with the new
+
+I decided to build Emacs24 from source. I also wanted to be able to
+easily upgrade it easily. Noting that there are couple of options for
+source control on the
+[project page](http://savannah.gnu.org/projects/emacs/), I immediately
+gravitated towards git. And shortly thereafter I stopped the clone
+because of the ginormous repository size. Since I couldn't care less
+about history, but want to be able to upgrade, I went with a shallow
+clone:
+
+{% highlight bash %}
+git clone git clone git://git.savannah.gnu.org/emacs.git --depth 1
+{% endhighlight %}
+
+This was significantly faster. Changing into the newly cloned
+directory, you need to do the following:
+
+{% highlight bash %}
+./autogen.sh
+./configure --help
+{% endhighlight %}
+
+You should be presented with a bunch of options. Like Avdi, I was keen
+on the gtk3 option, so I went with `./configure
+--with-x-toolkit=gtk3`. You may run into some problems if you're
+missing a few development libraries. For example, you may get a
+complaint about missing `libjpeg`. Here is the list of things I
+installed:
+
+{% highlight bash %}
+sudo apt-get install libgtk-3-dev libjpeg-dev libtiff-dev libgif-dev libxpm-dev texinfo
+{% endhighlight %}
+
+Run the configure command again and follow that up with `make`. Emacs
+should build and then head of compiling lisp. The final step is `sudo
+make install`, after which `emacs` should be available in
+`/usr/local/bin/emacs`.
+
+## Starter Kit
+
+Previously I used
+[technomancy's emacs-starter-kit](https://github.com/technomancy/emacs-starter-kit)
+as a basis for my configuration. However, I noticed that the v2 of his
+kit (which is meant for Emacs24) already has some issues for Ruby and
+technomancy himself commented that somebody else should own the fix
+for it as he doesn't actively use Ruby anymore. This may or may not be
+an issue, but is certainly concerning. One of technomancy's other
+projects I use a lot is rinari, which has been taken over by
+[Eric Schulte](https://github.com/eschulte). Rinari is still seeing
+some love and I noticed that they have a
+[starter-kit meant for Emacs24](https://github.com/eschulte/emacs24-starter-kit). I
+peeked inside it and it looks good, so I forked it and landed up doing
+the following:
+
+{% highlight bash %}
+git clone git@github.com:marcbowes/emacs24-dotfiles.git ~/.emacs.d
+{% endhighlight %}
+
+Only now did I book emacs (by typing `emacs`) and a few seconds went
+by while the starter kit fetched some ELPA packages. Then I was good
+to go.
+
+## Customizing
+
+The starter kit is just meant for some 'sane defaults'. But you should
+customize it. It's really easy to do too. With your shiny new Emacs,
+open up `~/.emacs.d/starter-kit.org` and take a read through. In
+`org-mode`, you use `TAB` to cycle visibility on the subsections. The
+important bits are:
+
+* You can create a file named after your username (+ .el), or a
+  directory named after your username or a file named after your
+  hostname (+ .el). The kit will pick these up and you can stick code
+  or customizations in there. Super useful.
+* The starter-kit provides sub-kits which you need to enable on a per
+  need basis, using `starter-kit-load NAME`.
+
+I did the following:
+
+### marc/init.el
+
+I created `~/.emacs.d/marc/init.el` with the following code:
+
+{% highlight cl %}
+(starter-kit-load "misc-recommended")
+(starter-kit-load "org")
+(starter-kit-load "ruby")
+(starter-kit-load "js")
+{% endhighlight %}
+
+I typed `M-x eval-buffer` and got an error relating to `paredit`. So I
+stuck in `(require 'paredit)` above the lisp and things were good.
+
+### marc/rails.el
+
+In `~/.emacs.d/marc/rails.el` I wanted to setup all the things I
+needed for Rails development. This means rinari and nXhtml. Firstly I
+needed to get a copy of both of these. I headed off to ELPA using `M-x
+packages-list-packages` and clicked on 'rinari', then
+'Install'. nXhtml, unfortunately, is not in sight. I went to [their
+homepage](http://ourcomments.org/Emacs/nXhtml/doc/nxhtml.html) (which
+hasn't changed at all) and found the instructions the same as last
+time. The long of it is: don't install from here, it's broken.
+
+Instead I found a
+[Github mirror](https://github.com/emacsmirror/nxhtml) which is fairly
+up to date (last commit about a month ago). I used a git submodule
+(the `-f` is because of the `.gitignore` file):
+
+{% highlight bash %}
+git submodule add -f git://github.com/emacsmirror/nxhtml.git vendor/nxhtml
+{% endhighlight %}
+
+Thinking I could now proceed, I added the following code into `rails.el`
+
+{% highlight cl %}
+;; rinari
+(require 'rinari)
+
+;; nxhtml
+(load (concat starter-kit-dir "vendor/nxhtml/autostart.el"))
+
+;; html+erb
+(add-to-list 'load-path (concat starter-kit-dir "vendor/nxhtml/util"))
+(require 'mumamo-fun)
+(setq mumamo-chunk-coloring 'submode-colored)
+(add-to-list 'auto-mode-alist '("\\.rhtml\\'" . eruby-html-mumamo))
+(add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-html-mumamo))
+{% endhighlight %}
+
+After `M-x eval-buffer` to get that loaded, I then hurried off to edit
+a `.html.erb` file. Disappointment. I landed up with a bunch of
+cryptic errors about `Making parse-sexp-lookup-properties local to
+application.html.erb while let-bound!` and a bunch of other crap. The
+mode just generally didn't work well. Somehow I stumbled upon a
+mention of `mode-compile` and used ELPA to install it and added
+`(require 'mode-compile)` to my `init.el`. Thereafter,
+things were peachy.
+
+### Misc
+
+I also added `browser.el` and `rbenv.el` to configure Emacs to know
+about Chrome and Rbenv stuff. You can read about
+[rbenv.el here](2012/03/10/rbenv-with-emacs.html). The contents of
+`browser.el` is simply:
+
+{% highlight cl %}
+;; use Chrome, installed by APT
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "/opt/google/chrome/chrome")
+{% endhighlight %}
