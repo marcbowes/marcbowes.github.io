@@ -5,12 +5,12 @@ title: Requires in your Ruby classes
 
 I write classes like this:
 
-```ruby
+{% highlight ruby %}
 class Foo
   require "base64"
   # codez
 end
-```
+{% endhighlight %}
 
 The important bit I want to bring your attention to is that I put the
 `require` statement inside the class. Some people don't care, some
@@ -21,7 +21,7 @@ Its very simple really. It's a form of encapsulation. Lets widen the
 scope of this class a bit. What if I'm developing this for the first
 time? Maybe I have the test in the same file:
 
-```ruby
+{% highlight ruby %}
 class Foo
   require "base64"
   # codez
@@ -31,7 +31,7 @@ require "rspec"
 
 describe Foo do
 end
-```
+{% endhighlight %}
 
 When I later tease this file apart into `lib/foo.rb` and
 `spec/lib/foo_spec.rb` my pattern makes it really hard for me to
@@ -42,13 +42,13 @@ with the describe block (if you squint, that's a class too).
 The only time I don't do this is when I need a symbol to be defined to
 actually create the class (i.e. inheritance):
 
-```ruby
+{% highlight ruby %}
 require "bar"
 
 class Foo < Bar
   # codez
 end
-```
+{% endhighlight %}
 
 This is completely unavoidable if you want the property that every
 file in your project should be individually requireable. For example,
@@ -72,7 +72,7 @@ think it makes sense outside a Rails application.
 
 For example, consider these two concerns:
 
-```ruby
+{% highlight ruby %}
 module ProvidesBacon
   extend ActiveSupport::Concern
   
@@ -84,7 +84,7 @@ module ProvidesBacon
     # codez
   end
 end
-```
+{% highlight ruby %}
 
 I do not think it makes sense to type `require 'active_support/concern'`
 before the `extend`. The reason for this is that we're using
