@@ -84,7 +84,7 @@ module ProvidesBacon
     # codez
   end
 end
-{% highlight ruby %}
+{% endhighlight %}
 
 I do not think it makes sense to type `require 'active_support/concern'`
 before the `extend`. The reason for this is that we're using
