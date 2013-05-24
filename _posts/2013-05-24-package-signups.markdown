@@ -34,6 +34,15 @@ every time you'll pay for that discount in other ways. Even in the
 world of software, non-savvy folk land up installing all sorts of
 toolbars for Internet Explorer when all they wanted was a music player.
 
+Not to mention the fact that I filled in the section "I want to keep
+these products" and specifically noted in the follow up email to the
+cancellation department that I Really Definitely want to *KEEP* my
+DSL. I got this in response, which puts the fear of being Internetless
+into me:
+
+![Please God No](http://i.imgur.com/CdBRMdz.jpg)
+
 My message: customer obsession. Don't create package deals which will
 require the customer to take some action in 12 months or even 10 days
 time if they want to not be charged.
+
