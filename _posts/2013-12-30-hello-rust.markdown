@@ -8,7 +8,7 @@ strong focus on boundaries and concurrency and is C compatible. That
 pretty much sold me, although the other claims seem nice too :-).
 
 Prior to writing this article, I've done some light reading of the
-[rust tutorial](http://doc.rust-lang.org/doc/0.8/tutorial.html) and
+[Tutorial](http://doc.rust-lang.org/doc/0.8/tutorial.html) and
 the [Rust for Rubyists book](http://www.rustforrubyists.com/).
 
 The reading I've done has strengthened my original gut feel that Rust
@@ -16,8 +16,10 @@ would be worthwhile to learn - but I can only read so much before I
 feel the need to turn theory into practice. So here goes. A series of
 short experiments designed to help me learn and understand Rust.
 
-To get going, I did a `brew install rust` and `M-x package-install RET
-rust-mode RET`.
+To get going, I did:
+
+1. Install Rust via `brew install rust`
+2. Install the Emacs (24) mode via `M-x package-install RET rust-mode RET`.
 
     > which rust
     /usr/local/bin/rust
@@ -45,7 +47,10 @@ rust-mode RET`.
     
     Use "rust help <command>" for more information about a command.
 
-I then opened up a emacs buffer and pasted in the hello world example
+`sketch` seems cool (and I love `irb`), but I couldn't actually get it
+to do anything useful other than segfault. Another day.
+
+I then opened up a Emacs buffer and pasted in the hello world example
 from the Rust home page:
 
 {% highlight rust %}
@@ -67,7 +72,8 @@ Sweet. Some notes:
 2. `warning: no debug symbols in executable (-arch x86_64)` - I should figure this out [1]
 3. A `rust~` file was generated which is executable and I can run, under `time` it takes about 0.01s
 4. A `rust~.dSYM` folder was generated with a bunch of stuff in that I should probably understand
-5. The executable is roughly 12k and is only 800 bytes bigger than a C program using stdio.h and printf
+5. The executable is roughly 12k and is only 800 bytes bigger than a C program using `stdio.h` and `printf`
+6. [This post](http://www.darkcoding.net/software/rust-what-i-learnt-so-far/) points out that you can use `rust run` as a shebang line
 
 [1] Probably related to [this issue](https://github.com/mozilla/rust/issues/3495).
 
@@ -119,7 +125,8 @@ what was wrong with flymake since it always worked well for me :-).
 
 After installing flycheck with `package-install`, I swapped to my
 `rust.rs` buffer and enabled the mode with `M-x flycheck-mode`. That
-didn't work and I got no feedback on why. +1 for flymake so far. With
+didn't work and I got very little feedback (i.e. "cannot find the rust
+executable" would have been nice). +1 for flymake :-). With
 `M-x flycheck-select-checker RET rust RET` I got an error saying it
 couldn't find the executable. Sounds like a path issue to me (under
 OSX, Emacs isn't started via a shell). I fixed this with `M-x
