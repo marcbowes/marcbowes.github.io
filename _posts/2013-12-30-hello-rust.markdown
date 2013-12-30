@@ -21,31 +21,33 @@ To get going, I did:
 1. Install Rust via `brew install rust`
 2. Install the Emacs (24) mode via `M-x package-install RET rust-mode RET`.
 
-    > which rust
-    /usr/local/bin/rust
-    
-    > rust -v
-    rust 0.8
-    host: x86_64-apple-darwin
-    
-    > rust
-    
-    The rust tool is a convenience for managing rust source code.
-    It acts as a shortcut for programs of the rust tool chain.
-    
-    Usage:	rust &lt;command&gt; [arguments]
-    
-    The commands are:
-    
-        build   compile rust source files
-        run     build an executable, and run it
-        test    build a test executable, and run it
-        doc     generate documentation from doc comments
-        pkg     download, build, install rust packages
-        sketch  run a rust interpreter
-        help    show detailed usage of a command
-    
-    Use "rust help &lt;command&gt;" for more information about a command.
+<pre>
+> which rust
+/usr/local/bin/rust
+
+> rust -v
+rust 0.8
+host: x86_64-apple-darwin
+
+> rust
+
+The rust tool is a convenience for managing rust source code.
+It acts as a shortcut for programs of the rust tool chain.
+
+Usage:	rust &lt;command&gt; [arguments]
+
+The commands are:
+
+    build   compile rust source files
+    run     build an executable, and run it
+    test    build a test executable, and run it
+    doc     generate documentation from doc comments
+    pkg     download, build, install rust packages
+    sketch  run a rust interpreter
+    help    show detailed usage of a command
+
+Use "rust help &lt;command&gt;" for more information about a command.
+</pre>
 
 `sketch` seems cool (and I love `irb`), but I couldn't actually get it
 to do anything useful other than segfault. Another day.
@@ -62,9 +64,11 @@ fn main() {
 Looking at the output of the `rust` command, I simply used `rust run`
 and it worked:
 
-    > rust run rust.rs
-    warning: no debug symbols in executable (-arch x86_64)
-    hello?
+<pre>
+> rust run rust.rs
+warning: no debug symbols in executable (-arch x86_64)
+hello?
+</pre>
 
 Sweet. Some notes:
 
@@ -79,32 +83,38 @@ Sweet. Some notes:
 
 After removing the tilde file and folder, I explored explicit compiling.
 
-    > rust help build
-    The build command is an alias for the rustc program.
-    
-    .. elided ..
+<pre>
+> rust help build
+The build command is an alias for the rustc program.
+
+.. elided ..
+</pre>
 
 Ok, so basically `rust build` is the same as `rustc`. I can get the
 help with `rustc --help`. I notice there is a `--parse-only` option:
 
-    > rustc --parse-only rust.rs
-    rust.rs:2:12: 3:1 error: unterminated double quote string
-    rust.rs:2     println("hello?);
-    rust.rs:3 }
-    libc++abi.dylib: terminating with uncaught exception of type unsigned long
-    [1]    34949 abort      rustc --parse-only rust.rs
+<pre>
+> rustc --parse-only rust.rs
+rust.rs:2:12: 3:1 error: unterminated double quote string
+rust.rs:2     println("hello?);
+rust.rs:3 }
+libc++abi.dylib: terminating with uncaught exception of type unsigned long
+[1]    34949 abort      rustc --parse-only rust.rs
+</pre>
 
 This is pretty similar to `ruby -c`. Combined with `flymake` in Emacs,
 I've had a lot of joy. I'm pretty keen to get that working for Rust
 too. On to compiling and running:
 
-    > time rustc rust.rs
-    warning: no debug symbols in executable (-arch x86_64)
-    rustc rust.rs  0.12s user 0.07s system 98% cpu 0.184 total
-    
-    > time ./rust
-    hello?
-    ./rust  0.00s user 0.00s system 87% cpu 0.010 total
+<pre>
+> time rustc rust.rs
+warning: no debug symbols in executable (-arch x86_64)
+rustc rust.rs  0.12s user 0.07s system 98% cpu 0.184 total
+
+> time ./rust
+hello?
+./rust  0.00s user 0.00s system 87% cpu 0.010 total
+</pre>
 
 I thought it a bit odd that the compilation took longer than with the
 `rust run` and that the execution was faster. So I ran each a few
