@@ -33,7 +33,7 @@ To get going, I did:
     The rust tool is a convenience for managing rust source code.
     It acts as a shortcut for programs of the rust tool chain.
     
-    Usage:	rust <command> [arguments]
+    Usage:	rust &lt;command&gt; [arguments]
     
     The commands are:
     
@@ -45,7 +45,7 @@ To get going, I did:
         sketch  run a rust interpreter
         help    show detailed usage of a command
     
-    Use "rust help <command>" for more information about a command.
+    Use "rust help &lt;command&gt;" for more information about a command.
 
 `sketch` seems cool (and I love `irb`), but I couldn't actually get it
 to do anything useful other than segfault. Another day.
