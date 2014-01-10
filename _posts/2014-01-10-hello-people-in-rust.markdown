@@ -91,7 +91,7 @@ The way you fix this is by telling the compiler what the lifetime
 is. This works similarly to generics, but you use apostrophes:
 
 {% highlight rust %}
-fn extract_name<'a>(line: &'a str) -> Option<&'a str> {
+fn extract_name<&#39;a>(line: &&#39;a str) -> Option<&&#39;a str> {
 {% endhighlight %}
 
 The first time `'a` is used is when I "define" the lifetime. (If you
@@ -173,8 +173,8 @@ the slices that the iterator yields. Testing time!
 {% highlight rust %}
 #[test]
 fn extract_name_returns_none_for_empty_input() {
-    assert!(extract_name(&amp;"").is_none());
-    assert!(extract_name(&amp;"\n").is_none());
+    assert!(extract_name(&"").is_none());
+    assert!(extract_name(&"\n").is_none());
 }
 {% endhighlight %}
 
@@ -199,3 +199,14 @@ hello Bob
 no name found
 hello David
 </pre>
+
+Things I'm happy with (because of how Rust promoted me to write code):
+
+1. Testing was straight forward.
+2. The File and BufferedReader API was straight forward.
+3. The line iterator was simple to use and resulted in efficient code.
+4. Code is pretty easy to read.
+5. The first time I executed the binary it worked. Sure, there were
+   issues with the newlines (which I should have caught in my
+   testing), but there were no memory issues or some other scary
+   behavior at run time.
