@@ -70,7 +70,7 @@ enabled. The `--test` argument tells the compiler to enable test and
 to also build the harness to run the tests. However, it barfed:
 
 <pre>
-hello-people.rs:5:5: 9:6 error: mismatched types: expected `std::option::Option<&str>` but found `std::option::Option<&str>` (lifetime mismatch)
+hello-people.rs:5:5: 9:6 error: mismatched types: expected `std::option::Option&lt;&amp;str&gt;` but found `std::option::Option&lt;&amp;str&gt;` (lifetime mismatch)
 hello-people.rs:5     if line.is_empty() {
 hello-people.rs:6         None
 hello-people.rs:7     } else {
@@ -139,7 +139,7 @@ Now I want to run the code.
 
 <pre>
 > rustc hello-people.rs && ./hello-people
-task '<main>' failed at 'Unhandled condition: io_error: io::IoError{kind: FileNotFound, desc: "no such file or directory", detail: None}', /private/tmp/rust-X9vK/src/libstd/condition.rs:139
+task '&lt;main&gt;' failed at 'Unhandled condition: io_error: io::IoError{kind: FileNotFound, desc: "no such file or directory", detail: None}', /private/tmp/rust-X9vK/src/libstd/condition.rs:139
 </pre>
 
 That's both expected and unexpected. Why did Rust allow me to run into
@@ -157,7 +157,7 @@ Bob
 
 David
 ^D
-> rustc hello-people.rs && ./hello-people
+> rustc hello-people.rs &amp;&amp; ./hello-people
 hello Andy
 
 hello Bob
@@ -173,14 +173,14 @@ the slices that the iterator yields. Testing time!
 {% highlight rust %}
 #[test]
 fn extract_name_returns_none_for_empty_input() {
-    assert!(extract_name(&"").is_none());
-    assert!(extract_name(&"\n").is_none());
+    assert!(extract_name(&amp;"").is_none());
+    assert!(extract_name(&amp;"\n").is_none());
 }
 {% endhighlight %}
 
 <pre>
 running 2 tests
-task 'extract_name_returns_none_for_empty_input' failed at 'assertion failed: extract_name(&"\n").is_none()', hello-people.rs:20
+task 'extract_name_returns_none_for_empty_input' failed at 'assertion failed: extract_name(&amp;"\n").is_none()', hello-people.rs:20
 test extract_name_returns_none_for_empty_input ... FAILED
 </pre>
 
@@ -188,16 +188,12 @@ Gotcha. I fixed this with a call to `trim()` in the function and
 everything worked:
 
 <pre>
-> rustc --test hello-people.rs -o test-hello-people && ./test-hello-people
-hello-people.rs:24:1: 1:1 warning: code is never used: `main`, #[warn(dead_code)] on by default
-
 running 2 tests
 test extract_name_returns_none_for_empty_input ... ok
 test extract_name_returns_some_for_non_empty_input ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 
-> rustc hello-people.rs && ./hello-people
 hello Andy
 hello Bob
 no name found
