@@ -91,7 +91,7 @@ The way you fix this is by telling the compiler what the lifetime
 is. This works similarly to generics, but you use apostrophes:
 
 {% highlight rust %}
-fn extract_name<&#39;a>(line: &&#39;a str) -> Option<&&#39;a str> {
+fn extract_name<'a>(line: &'a str) -> Option<&'a str> {
 {% endhighlight %}
 
 The first time `'a` is used is when I "define" the lifetime. (If you
