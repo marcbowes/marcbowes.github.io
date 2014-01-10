@@ -11,14 +11,14 @@ behind. Notably, the language support for the `@` pointer has been
 removed - so do keep that in mind.
 
 In this installment I want to write a simple, testable program which
-prints "hello <name>" for each name in a text file. This is what I
+prints "hello $name" for each name in a text file. This is what I
 landed up with:
 
 {% highlight rust %}
 use std::io::buffered::BufferedReader;
 use std::io::File;
 
-fn extract_name(line: &str) -> Option<&str> {
+fn extract_name(line: &amp;str) -> Option<&str> {
     if line.is_empty() {
         None
     } else {
