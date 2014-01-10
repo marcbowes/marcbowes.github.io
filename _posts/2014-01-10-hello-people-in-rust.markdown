@@ -120,7 +120,7 @@ all error messages will be really intelligible. I guess this will
 improve in the future.
 
 <pre>
-> rustc --test hello-people.rs -o test-hello-people && ./test-hello-people
+> rustc --test hello-people.rs -o test-hello-people &amp;&amp; ./test-hello-people
 hello-people.rs:17:1: 1:1 warning: code is never used: `main`, #[warn(dead_code)] on by default
 
 running 1 test
@@ -138,7 +138,7 @@ implementation into a mod.
 Now I want to run the code.
 
 <pre>
-> rustc hello-people.rs && ./hello-people
+> rustc hello-people.rs &amp;&amp; ./hello-people
 task '&lt;main&gt;' failed at 'Unhandled condition: io_error: io::IoError{kind: FileNotFound, desc: "no such file or directory", detail: None}', /private/tmp/rust-X9vK/src/libstd/condition.rs:139
 </pre>
 
