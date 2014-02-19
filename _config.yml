@@ -1,0 +1,12 @@
+markdown: rdiscount
+pygments: true
+permalink: /posts/:title
+rdiscount:
+  extensions: [smart]
+
+name: Marc Bowes
+url: http://marc-bowes.com
+description: It's a blog. Really.
+twitter: marcbowes
+github: marcbowes
+gravatar_url: http://www.gravatar.com/avatar/74712fd9c19f36134151f23c4505435c.png
