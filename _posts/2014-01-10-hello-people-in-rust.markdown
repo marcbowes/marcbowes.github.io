@@ -18,7 +18,7 @@ landed up with:
 use std::io::buffered::BufferedReader;
 use std::io::File;
 
-fn extract_name(line: &amp;str) -> Option<&str> {
+fn extract_name(line: &str) -> Option<&str> {
     if line.is_empty() {
         None
     } else {
@@ -95,18 +95,17 @@ fn extract_name<'a>(line: &'a str) -> Option<&'a str> {
 {% endhighlight %}
 
 The first time `'a` is used is when I "define" the lifetime. (If you
-don't do this, you'll get `use of undeclared lifetime name
-&#x60;'a&#x60;`.) This should be familiar to you if you've used
-generics. The next two are basically annotations on the lifetimes of
-the argument and return time. The important thing is that my function
-now explicitly states that the (wrapped) reference I am returning
-cannot be used past the point at which the original reference would go
-out of scope. Think about that for a moment: Rust has figured out that
-the string slice can go out of scope. For example, I might collect all
-the extracted names and say hello to them after closing the file. That
-wouldn't compile unless I changed my function to return a copy of the
-data. Awesome! If you've ever written code that segfaults, this should
-make you happy.
+don't do this, you'll get `use of undeclared lifetime`.) This should
+be familiar to you if you've used generics. The next two are basically
+annotations on the lifetimes of the argument and return time. The
+important thing is that my function now explicitly states that the
+(wrapped) reference I am returning cannot be used past the point at
+which the original reference would go out of scope. Think about that
+for a moment: Rust has figured out that the string slice can go out of
+scope. For example, I might collect all the extracted names and say
+hello to them after closing the file. That wouldn't compile unless I
+changed my function to return a copy of the data. Awesome! If you've
+ever written code that segfaults, this should make you happy.
 
 Finally, with regard to the weird A-but-A style error, I got told
 this by one of the friendly guys on `#rust`:
