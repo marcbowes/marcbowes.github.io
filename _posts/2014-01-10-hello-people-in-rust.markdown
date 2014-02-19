@@ -199,7 +199,7 @@ no name found
 hello David
 </pre>
 
-Things I'm happy with (because of how Rust promoted me to write code):
+Things I'm happy with (because of how Rust prompted me to write code):
 
 1. Testing was straight forward.
 2. The File and BufferedReader API was straight forward.
