@@ -69,6 +69,7 @@ Grab the following:
 
 * Install the Android Development Toolkit and change into `sdk/platform-tools`
 * In recovery, choose to install update from zip file
+* I did a full wipe before doing this
 * Choose sideload -- you will be prompted to run `adb sideload`. I ran
   `adt-bundle-mac-x86_64-20140321/sdk/platform-tools/adb sideload
   $HOME/Downloads/cm-11-20140504-SNAPSHOT-M6-i9300.zip`
