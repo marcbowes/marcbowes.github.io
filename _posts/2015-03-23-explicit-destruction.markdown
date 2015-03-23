@@ -236,9 +236,8 @@ database.truncate # fails if you're in --pretend mode
 
 The above snippet is simplified for demonstrative purposes. If you
 used that and didn't protect the call the `#truncate` behind it's own
-descructive-check, you'd land up calling `@actual_db_conn` on
-`NilClass` and your application would blow up. Again: this is better
-than data loss.
+descructive-check, you'd land up calling a method on `NilClass` and
+your application would blow up. Again: this is better than data loss.
 
 To take this a step further, you could return a fake DB object:
 
