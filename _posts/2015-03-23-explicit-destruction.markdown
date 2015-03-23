@@ -187,7 +187,7 @@ A significantly better way of handling this issue could be:
 class Options < Struct.new :pretend_mode
 
   # I chose a scary method and hid the passive `pretend?` method so
-  # that it is really clear what the caller is option into.
+  # that it is really clear what the caller is opting into.
   def destructive
     yield unless pretend?
   end
