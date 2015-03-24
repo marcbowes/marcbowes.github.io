@@ -28,7 +28,7 @@ end
 This works because the body of the `if` statement will execute if the
 expression is "truthy". In Ruby, pretty much everything is truthy
 (except `nil`, `false`). The above idiom is a _finesse_. There are
-otherwise to keep this concise, but if we wanted to be _explicit_,
+other ways to keep this concise, but if we wanted to be _explicit_,
 we'd write:
 
 {% highlight ruby %}
@@ -78,7 +78,7 @@ You've just charged your customer twice. The additional charge is
 probably more than it would have cost you to type a few more
 characters in the first place.
 
-Worst, your unit tests probably would not have caught this because
+Worse, your unit tests probably would not have caught this because
 your test data may not have reflected the change in input.
 
 That's a school boy error though, surely? Why would you change your
@@ -221,7 +221,7 @@ This is better because many of the typo cases will now result in
 you've also fixed the 'unknown args' issue, the only outstanding
 problem is ensuring all destructive actions are protected. There are a
 couple of ways of doing this. If you're prepared to do some
-refactoring, I think this a pragmatic solution is to hide dependencies
+refactoring, I think that a pragmatic solution is to hide dependencies
 so that they are only accessible behind destructive-checking barriers:
 
 {% highlight ruby %}
