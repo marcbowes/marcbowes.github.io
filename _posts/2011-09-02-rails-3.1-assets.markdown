@@ -13,15 +13,14 @@ Feel free to skip this background story of the mess I managed to get
 myself into. I'm sure it's a mess that many people land up with, so
 it'll be all familiar :-(
 
-The app in question is a personal project and is Javascript (via
-[Backbone](http://documentcloud.github.com/backbone/))
-heavy. Javascript, in general, doesn't (until now?) get as much from
-Rails developers as the rest of the stack. One of the things that
-Rails does very well is take away the overhead of having to make
-decisions. 'Where do I put this? What do I call it?' If you're like
-me, you care about these questions because they impact your ability to
-reason about and maintain your code. The asset pipeline helps with
-this. A lot.
+The app in question is a personal project and is Javascript
+(via [Backbone](http://wiht.link/backbonejs-intro)) heavy. Javascript,
+in general, doesn't (until now?) get as much from Rails developers as
+the rest of the stack. One of the things that Rails does very well is
+take away the overhead of having to make decisions. 'Where do I put
+this? What do I call it?' If you're like me, you care about these
+questions because they impact your ability to reason about and
+maintain your code. The asset pipeline helps with this. A lot.
 
 Here is the basic problem my toy app was facing. I started out with a
 Rails 3 app which generated all the Prototype files. I shoved in
