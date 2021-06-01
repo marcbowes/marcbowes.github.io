@@ -1,5 +1,5 @@
 sass = $(wildcard pile-theme/*.scss)
-css = docs/css/main.css
+css = public/css/main.css
 
 $(css): $(sass)
 	@echo building css
