@@ -1,0 +1,10 @@
+#+title: Blog bankruptcy
+#+date: <2020-06-01 Tue>
+#+author: Marc Bowes
+#+SETUPFILE: ../org-template/style.org
+
+* Blog bankruptcy
+
+My previous blog was based on Jekyll and was a little too fiddly. I'm bad enough
+at blogging that even that small amount of friction was too much for me. The new
+setup is Emacs based and should hopefully be a lot simpler.
