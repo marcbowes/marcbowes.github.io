@@ -2,7 +2,8 @@
 layout: post
 title: "QLDB IAM-based permissions"
 date: 2021-06-01 13:44:27 -0700
-categories: jekyll update
+author: Marc
+categories: qldb
 ---
 
 Today, the QLDB team shipped [IAM-based access policy for PartiQL queries and
